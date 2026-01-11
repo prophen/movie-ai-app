@@ -56,14 +56,11 @@ curl -X POST http://localhost:8788/api/seed \
 Notes:
 - Use the Supabase anon key in the browser only when RLS is enabled.
 - Keep the Supabase service role key only on the server if you need elevated access.
-## About Scrimba
 
-At Scrimba our goal is to create the best possible coding school at the cost of a gym membership! 💜
-If we succeed with this, it will give anyone who wants to become a software developer a realistic shot at succeeding, regardless of where they live and the size of their wallets 🎉
-The Fullstack Developer Path aims to teach you everything you need to become a Junior Developer, or you could take a deep-dive with one of our advanced courses 🚀
+## PopChoice - AI Movie Recommendations
 
-- [Our courses](https://scrimba.com/courses)
-- [The Frontend Career Path](https://scrimba.com/fullstack-path-c0fullstack)
-- [Become a Scrimba Pro member](https://scrimba.com/pricing)
+This is the solo project from the AI Engineering module on Scrimba's Fullstack Path
+<img width="489" height="915" alt="image" src="https://github.com/user-attachments/assets/5eb32dd3-01b1-4dee-9402-37aef9b7a82f" />
+<img width="489" height="915" alt="image" src="https://github.com/user-attachments/assets/9e5f5b86-5d7d-4717-aef4-0dc9286e62da" />
 
-Happy Coding!
+
