@@ -4,12 +4,23 @@ const movieQuiz = document.getElementById("movie-quiz");
 const responseDiv = document.getElementById("response");
 const loadingDiv = document.getElementById("loading");
 const submitBtn = document.getElementById("submit-btn");
+const textareas = Array.from(document.querySelectorAll("textarea"));
 
 document.body.addEventListener("click", (e) => {
   if (e.target.id === "start-over-btn") {
     movieQuiz.classList.remove("hidden");
     responseDiv.classList.add("hidden");
   }
+});
+
+function autoResize(textarea) {
+  textarea.style.height = "auto";
+  textarea.style.height = `${textarea.scrollHeight}px`;
+}
+
+textareas.forEach((textarea) => {
+  autoResize(textarea);
+  textarea.addEventListener("input", () => autoResize(textarea));
 });
 
 movieQuiz.addEventListener("submit", async (e) => {

@@ -41,17 +41,33 @@ label {
   margin-bottom: 15px;
 }
 textarea {
-  background-color: #3b4877;
+  background-color: transparent;
   border: none;
-  border-radius: 10px;
-  height: 80px;
+  border-radius: 0;
+  height: 70px;
+  width: 100%;
   resize: none;
+  overflow: hidden;
   font-family: inherit;
   color: white;
   font-weight: 300;
-  font-size: 0.875rem;
-  margin-bottom: 40px;
+  font-size: 1rem;
   padding: 20px;
+}
+
+textarea:focus {
+  outline: none;
+}
+
+.textarea-wrap {
+  background-color: #3b4877;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.textarea-wrap:focus-within {
+  box-shadow: 0 0 0 2px rgba(81, 224, 138, 0.6);
 }
 
 button {
@@ -65,9 +81,7 @@ button {
   margin-bottom: 40px;
   cursor: pointer;
   border: 2px solid transparent;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
     background-color 0.15s ease;
 }
 button:hover {
@@ -78,8 +92,7 @@ button:hover {
 button:focus-visible {
   outline: none;
   border-color: #d7ffe7;
-  box-shadow:
-    0 0 0 3px rgba(81, 224, 138, 0.35),
+  box-shadow: 0 0 0 3px rgba(81, 224, 138, 0.35),
     0 8px 18px rgba(15, 40, 20, 0.35);
 }
 h2 {
