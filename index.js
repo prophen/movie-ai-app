@@ -46,9 +46,12 @@ movieQuiz.addEventListener("submit", async (e) => {
       match_count: 5,
     });
 
-    const candidates = data
-      .map((row, i) => `#${i + 1}\n${row.content}`)
-      .join("\n\n");
+    const similarityThreshold = 0.75;
+    const topSimilarity = data?.[0]?.similarity ?? 0;
+    const useCandidates = topSimilarity >= similarityThreshold;
+    const candidates = useCandidates
+      ? data.map((row, i) => `#${i + 1}\n${row.content}`).join("\n\n")
+      : "None";
 
     const completion = await callOpenAI({
       model: "gpt-4o-mini",
