@@ -1,10 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>PopChoice</title>
-        <link rel="stylesheet" href="index.css">
-    </head>
-    <body>
-        <script type="module" src="index.js"></script>
-    </body>
-</html> 
+  <head>
+    <title>PopChoice</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Carter+One&family=Roboto+Slab:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img
+          src="PopChoiceIcon.png"
+          alt="cartoony bucket of popcorn with big eyes and a smile"
+        />
+        <h1>PopChoice</h1>
+      </header>
+      <main>
+        <form>
+          <label for="favorite-movie"
+            >What's your favorite movie and why?</label
+          >
+          <textarea id="favorite-movie"></textarea>
+          <label for="mood"
+            >Are you in the mood for something new or a classic?</label
+          >
+          <textarea id="mood"></textarea>
+          <label for="fun-or-serious"
+            >Do you wanna have fun or do you want something serious?</label
+          >
+          <textarea id="fun-or-serious"></textarea>
+          <button id="submit-btn">Let's Go</button>
+        </form>
+        <div id="response" class="response hidden">
+          <h2>School of Rock (2009)</h2>
+          <p>
+            A fun and stupid movie about a wannabe rocker turned fraud
+            substitute teacher forming a rock band with his students to win the
+            Battle of the Bands
+          </p>
+          <button id="start-over-btn">Go Again</button>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>

@@ -20,6 +20,10 @@ VITE_WORKER_URL=https://your-worker.your-domain.com
 Pages secrets (Cloudflare):
 ```
 OPENAI_API_KEY=...
+SUPABASE_URL=...
+SUPABASE_SERVICE_ROLE_KEY=...
+SUPABASE_TABLE=movies
+SEED_TOKEN=...
 ```
 
 Optional: set a CORS allowlist for the Function:
@@ -32,6 +36,22 @@ Deploy Pages:
 - Set environment variables in Pages settings.
 - Build command: `npm run build`
 - Output directory: `dist`
+
+Local Pages Functions:
+- Create `.dev.vars` from `.dev.vars.sample` with your `OPENAI_API_KEY`.
+- Run: `npm run pages:build`
+- Run: `npm run pages:dev`
+- Or one command: `npm run pages:serve`
+- Watch mode (auto rebuild): `npm run pages:watch`
+
+Seeding embeddings:
+- Ensure the `movies` table exists with `content` and `embedding` columns.
+- Set `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `SEED_TOKEN` in your Pages env vars (or `.dev.vars` locally).
+- POST to `/api/seed` with `X-Seed-Token`:
+```
+curl -X POST http://localhost:8788/api/seed \
+  -H "X-Seed-Token: your-token"
+```
 
 Notes:
 - Use the Supabase anon key in the browser only when RLS is enabled.
