@@ -2,7 +2,8 @@ import { callOpenAI, supabase } from "./config.js";
 
 const movieQuiz = document.getElementById("movie-quiz");
 const responseDiv = document.getElementById("response");
-const startOverBtn = document.getElementById("start-over-btn");
+const loadingDiv = document.getElementById("loading");
+const submitBtn = document.getElementById("submit-btn");
 
 document.body.addEventListener("click", (e) => {
   if (e.target.id === "start-over-btn") {
@@ -13,74 +14,91 @@ document.body.addEventListener("click", (e) => {
 
 movieQuiz.addEventListener("submit", async (e) => {
   e.preventDefault();
+  loadingDiv.classList.remove("hidden");
+  submitBtn.disabled = true;
+  submitBtn.setAttribute("aria-busy", "true");
+  responseDiv.classList.add("hidden");
 
-  const queryText = buildQueryText();
+  try {
+    const queryText = buildQueryText();
 
-  const embedResp = await fetch("/api/embed", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ input: queryText }),
-  });
-  const embedData = await embedResp.json();
-  const queryEmbedding = embedData.data[0].embedding;
+    const embedResp = await fetch("/api/embed", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input: queryText }),
+    });
+    const embedData = await embedResp.json();
+    const queryEmbedding = embedData.data[0].embedding;
 
-  const { data } = await supabase.rpc("match_movies", {
-    query_embedding: queryEmbedding,
-    match_count: 5,
-  });
+    const { data } = await supabase.rpc("match_movies", {
+      query_embedding: queryEmbedding,
+      match_count: 5,
+    });
 
-  const candidates = data
-    .map((row, i) => `#${i + 1}\n${row.content}`)
-    .join("\n\n");
+    const candidates = data
+      .map((row, i) => `#${i + 1}\n${row.content}`)
+      .join("\n\n");
 
-  const completion = await callOpenAI({
-    model: "gpt-4o-mini",
-    response_format: {
-      type: "json_schema",
-      json_schema: {
-        name: "movie_recommendation",
-        schema: {
-          type: "object",
-          additionalProperties: false,
-          properties: {
-            title: { type: "string" },
-            year: { type: "integer" },
-            reason: { type: "string" },
+    const completion = await callOpenAI({
+      model: "gpt-4o-mini",
+      response_format: {
+        type: "json_schema",
+        json_schema: {
+          name: "movie_recommendation",
+          schema: {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              title: { type: "string" },
+              year: { type: "integer" },
+              reason: { type: "string" },
+            },
+            required: ["title", "year", "reason"],
           },
-          required: ["title", "year", "reason"],
         },
       },
-    },
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are a movie recommender. Respond with the JSON only no extra characters or labeling",
-      },
-      {
-        role: "user",
-        content: `User preferences:\n${queryText}\n\nReturn JSON only with keys: title, year, reason.
-        Database candidates (use these if they are a strong match):
-        ${candidates}
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a movie recommender. Respond with the JSON only no extra characters or labeling",
+        },
+        {
+          role: "user",
+          content: `User preferences:\n${queryText}\n\nReturn JSON only with keys: title, year, reason.
+          Database candidates (use these if they are a strong match):
+          ${candidates}
 
-        If none of the candidates are a good fit, recommend a movie outside the database instead. Always explain why.
-        `,
-      },
-    ],
-  });
-  const raw = completion.choices[0].message.content.trim();
-  let parsed;
-  try {
-    parsed = JSON.parse(raw);
-  } catch {
-    const jsonText = raw
-      .replace(/^```(?:json)?/i, "")
-      .replace(/```$/i, "")
-      .trim();
-    parsed = JSON.parse(jsonText);
+          If none of the candidates are a good fit, recommend a movie outside the database instead. Always explain why.
+          `,
+        },
+      ],
+    });
+    const raw = completion.choices[0].message.content.trim();
+    let parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      const jsonText = raw
+        .replace(/^```(?:json)?/i, "")
+        .replace(/```$/i, "")
+        .trim();
+      parsed = JSON.parse(jsonText);
+    }
+    movieQuiz.reset();
+    makeMovieRecommendation(parsed);
+  } catch (error) {
+    responseDiv.classList.remove("hidden");
+    responseDiv.innerHTML = `
+      <h2>Something went wrong</h2>
+      <p>${error.message || "Please try again."}</p>
+      <button id="start-over-btn">Go Again</button>
+    `;
+  } finally {
+    loadingDiv.classList.add("hidden");
+    submitBtn.disabled = false;
+    submitBtn.removeAttribute("aria-busy");
   }
-  movieQuiz.reset();
-  makeMovieRecommendation(parsed);
 });
 
 function makeMovieRecommendation(movieObj) {
