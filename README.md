@@ -59,7 +59,7 @@ Notes:
 
 ## PopChoice - AI Movie Recommendations
 
-This is the solo project from the AI Engineering module on Scrimba's Fullstack Path
+This is the solo project from the RAG and Vector Databases module on Scrimba's Fullstack Path
 <img width="489" height="915" alt="image" src="https://github.com/user-attachments/assets/5eb32dd3-01b1-4dee-9402-37aef9b7a82f" />
 <img width="489" height="915" alt="image" src="https://github.com/user-attachments/assets/9e5f5b86-5d7d-4717-aef4-0dc9286e62da" />
 
